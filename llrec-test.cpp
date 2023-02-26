@@ -27,6 +27,11 @@ void print(Node* head);
  */
 void dealloc(Node* head);
 
+bool Odd(int i) 
+{
+    return i%2==0; 
+} 
+
 
 Node* readList(const char* filename)
 {
@@ -86,9 +91,22 @@ int main(int argc, char* argv[])
     print(head);
 
     // Test out your linked list code
+    Node small(0, NULL);
+    Node* smaller = &small;
+    Node large(0, NULL);
+    Node* larger = &large;
+		int pivot = 9;
 
+    llpivot(head, smaller, larger, pivot);
+    cout << "Smaller list: ";
+    print(smaller);
 
+    cout << "Larger list: ";
+    print(larger);
 
+		llfilter(larger, Odd);
+		cout << "filtered: ";
+		print(larger);
     
     return 0;
 

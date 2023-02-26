@@ -2,6 +2,7 @@
 #define HEAP_H
 #include <functional>
 #include <stdexcept>
+#include <vector>
 
 template <typename T, typename PComparator = std::less<T> >
 class Heap
@@ -61,13 +62,46 @@ public:
 
 private:
   /// Add whatever helper functions and data members you need below
-
-
-
-
+  std::vector<T> data;
+  PComparator k;
 };
 
 // Add implementation of member functions here
+template <typename T, typename PComparator >
+Heap<T,PComparator>::Heap(int m, PComparator c) {
+    k = c;
+}
+
+template <typename T, typename PComparator >
+Heap<T,PComparator>::~Heap() {
+    
+}
+
+template <typename T, typename PComparator >
+void Heap<T, PComparator>::push(const T& item) {
+    data.push_back(item);
+    std::size_t index = data.size() - 1;
+    while (index != 0) {
+        std::size_t parent_index = (index - 1) / 2;
+        T& current = data[index];
+        T& parent = data[parent_index];
+        if (!k(data[index],data[parent_index])) {
+            break;
+        }
+        std::swap(current, parent);
+        index = parent_index;
+    }
+}
+
+template <typename T, typename PComparator>
+std::size_t Heap<T, PComparator>::size() const {
+    return data.size();
+}
+
+template <typename T, typename PComparator>
+bool Heap<T, PComparator>::empty() const {
+    return data.size()== 0;
+}
 
 
 // We will start top() for you to handle the case of 
@@ -81,12 +115,11 @@ T const & Heap<T,PComparator>::top() const
     // ================================
     // throw the appropriate exception
     // ================================
-
-
+    throw std::out_of_range("heap is empty");
   }
   // If we get here we know the heap has at least 1 item
   // Add code to return the top element
-
+  return data[0];
 
 
 }
@@ -101,12 +134,34 @@ void Heap<T,PComparator>::pop()
     // ================================
     // throw the appropriate exception
     // ================================
-
-
+    throw std::out_of_range("heap is empty");
   }
+	int curr = 0;
+	data[curr] = data[data.size()-1];
+  data.pop_back();
 
-
-
+	while((2*curr+1)< int(data.size())) {
+		int child;
+		if((2*curr+2) == int(data.size())) {
+			child = 2*curr+1;
+		}
+		else {
+			if(k(data[2*curr+1],data[2*curr+2])) {
+				child = 2*curr+1;
+			}
+			else {
+				child = 2*curr+2;
+			}
+		}
+    if(k(data[child],data[curr]))
+    {
+	    std::swap(data[child],data[curr]);
+      curr = child;
+    }
+    else {
+      break;
+    }
+	}	
 }
 
 
